@@ -1,0 +1,162 @@
+{% extends 'shop/basic.html' %}
+{% block title%} Checkout - ShopDrop{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="col my-4">
+        <div class="my-4">
+            <ul class="list-group" id="items">
+            </ul>
+          <li class="list-group-item d-flex justify-content-between mt-3" style="background-color:black; color:white;">
+          <strong>Total Price: Rs. <span id="totalPrice"></span></strong>
+        </li>
+        </div>
+    </div>
+    <hr class="my-5" width="100%" size="2">
+        <div class="col my-4">
+            <h3>Step 2 - Enter Address & Other Details</h3>
+            <form method="post" action="/shop/checkout/">{% csrf_token %}
+              <input type="hidden" name="itemsJson" id="itemsJson">
+              <input type="hidden" name="amount" id="amount">
+  <div class="my-4">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="email">Email</label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+    </div>
+  </div>
+  <div class="my-2">
+      <div class="my-1">
+          <label for="phone">Phone&nbsp</label>
+      </div>
+          <input type="tel" class="form-control" id="phone" name="phone">
+        </div>
+  <div class="form-group">
+    <label for="address1">Address</label>
+    <input type="text" class="form-control" id="address1" name="address1" placeholder="1234 Main St">
+  </div>
+  <div class="form-group">
+    <label for="address2">Address 2</label>
+    <input type="text" class="form-control" id="address2" name="address2" placeholder="Apartment, studio, or floor">
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="city">City</label>
+      <input type="text" class="form-control" id="city" name="city">
+    </div>
+    <div class="form-group col-md-4">
+      <label for="state">State</label>
+      <select id="state" name="state" class="form-control">
+        <option selected>Choose...</option>
+    <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+    <option value="Andhra Pradesh">Andhra Pradesh</option>
+    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+    <option value="Assam">Assam</option>
+    <option value="Bihar">Bihar</option>
+    <option value="Chandigarh">Chandigarh</option>
+    <option value="Chhattisgarh">Chhattisgarh</option>
+    <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+    <option value="Daman and Diu">Daman and Diu</option>
+    <option value="Delhi">Delhi</option>
+    <option value="Goa">Goa</option>
+    <option value="Gujarat">Gujarat</option>
+    <option value="Haryana">Haryana</option>
+    <option value="Himachal Pradesh">Himachal Pradesh</option>
+    <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+    <option value="Jharkhand">Jharkhand</option>
+    <option value="Karnataka">Karnataka</option>
+    <option value="Kerala">Kerala</option>
+    <option value="Ladakh">Ladakh</option>
+    <option value="Lakshadweep">Lakshadweep</option>
+    <option value="Madhya Pradesh">Madhya Pradesh</option>
+    <option value="Maharashtra">Maharashtra</option>
+    <option value="Manipur">Manipur</option>
+    <option value="Meghalaya">Meghalaya</option>
+    <option value="Mizoram">Mizoram</option>
+    <option value="Nagaland">Nagaland</option>
+    <option value="Odisha">Odisha</option>
+    <option value="Puducherry">Puducherry</option>
+    <option value="Punjab">Punjab</option>
+    <option value="Rajasthan">Rajasthan</option>
+    <option value="Sikkim">Sikkim</option>
+    <option value="Tamil Nadu">Tamil Nadu</option>
+    <option value="Telangana">Telangana</option>
+    <option value="Tripura">Tripura</option>
+    <option value="Uttar Pradesh">Uttar Pradesh</option>
+    <option value="Uttarakhand">Uttarakhand</option>
+    <option value="West Bengal">West Bengal</option>
+      </select>
+    </div>
+    <div class="form-group col-md-2">
+      <label for="zipcode">Zip</label>
+      <input type="text" class="form-control" id="zipcode" name="zipcode">
+    </div>
+  </div>
+  <button type="submit" class="btn btn-success">Proceed to Payment</button>
+  </div>
+</form>
+</div>
+</div>
+
+
+{% endblock %}
+{% block js %}
+<link
+     rel="stylesheet"
+     href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
+   />
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+<script>
+   const phoneInputField = document.querySelector("#phone");
+   const phoneInput = window.intlTelInput(phoneInputField, {
+     utilsScript:
+       "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+   });
+</script>
+
+<script>
+if (localStorage.getItem('cart') == null) {
+    var cart = {};
+} else {
+    cart = JSON.parse(localStorage.getItem('cart'));
+}
+console.log(cart);
+var sum = 0;
+var totalPrice = 0;
+if ($.isEmptyObject(cart)) {
+    //if object is empty
+    mystr = `<p>Your cart is empty, please add some items to your cart before checking out!</p>`
+    $('#items').append(mystr);
+} else {
+    for (item in cart) {
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        let itemPrice = cart[item][2];
+        sum = sum + qty;
+        totalPrice = totalPrice + (qty*itemPrice);
+        /*mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                    ${name}
+                    <span class="badge badge-primary badge-pill">${qty}</span>
+                </li>`*/
+        mystr=`<li class="list-group-item d-flex justify-content-between lh-condensed">
+          <strong>${name}</strong>
+          <span class="text-muted"><strong>${qty}</strong></span>
+        </li>`
+        $('#items').append(mystr);
+    }
+}
+document.getElementById('cart').innerHTML = sum;
+document.getElementById('totalPrice').innerHTML = totalPrice;
+$('#itemsJson').val(JSON.stringify(cart));
+{% if thank %}
+alert('Thank you for ordering with us. Your order id is {{id}}. Use it to track your order using our order tracker.');
+localStorage.clear();
+document.location="/shop";
+{% endif %}
+
+  $('#amount').val($('#totalPrice').html())
+</script>
+{% endblock %}

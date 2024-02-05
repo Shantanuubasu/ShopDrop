@@ -1,0 +1,53 @@
+{% extends 'blog/basic.html' %}
+
+{% block title%}
+    ShopDrop - BlogPost
+{% endblock %}
+
+{% block body %}
+<main role="main" class="container mt-4">
+  <div class="row container">
+    <div class="col-md-8 blog-main">
+      <h2 class="pb-4 font-italic">
+        {{post.title}}
+      </h2>
+      <div class="fb-like border-bottom" data-href="http://127.0.0.1:8000/blog/blogpost/{{post.post_id}}" data-width="" data-layout="" data-action="" data-size="" data-share="true"></div>
+
+      <div class="blog-post">
+        <h3 class="blog-post-title">{{post.head0}}</h3>
+        <p class="blog-post-meta">{{post.pub_date}} | <a href="https://www.linkedin.com/in/shantanuubasu/">Shantanu, Founder</a></p>
+
+        <p>{{post.chead0}}</p>
+        <h4>{{post.head1}}</h4>
+        <p>{{post.chead1}}</p>
+          <h4>{{post.head2}}</h4>
+        <p>{{post.chead2}}</p>
+
+    <div class="fb-comments border-top my-4" data-href="http://127.0.0.1:8000/blog/blogpost/{{post.post_id}}" data-width="" data-numposts="5"></div>
+
+      </div><!-- /.blog-post -->
+
+
+
+    </div><!-- /.blog-main -->
+
+    <aside class="col-md-4 blog-sidebar">
+      <div class="p-4 mb-3 rounded ml-4">
+        <img src="/media/{{post.thumbnail}}" width="300px" height="400px" style="border-radius:10px">
+      </div>
+
+
+
+      <div class="p-4 ml-4">
+        <h4 class="font-italic">Quick Links</h4>
+        <ol class="list-unstyled">
+          <li><a href="/">Home</a></li>
+          <li><a href="/shop">Shop</a></li>
+        </ol>
+      </div>
+    </aside><!-- /.blog-sidebar -->
+
+  </div><!-- /.row -->
+
+</main>
+{% endblock %}

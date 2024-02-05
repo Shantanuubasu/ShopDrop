@@ -1,0 +1,104 @@
+{% extends 'shop/basic.html' %}
+
+{% block title%} Contact Us{% endblock %}
+{% block body %}
+{% load static %}
+<div class="container">
+  <div class="py-5 text-center">
+    <h2>Contact Us</h2>
+    <p class="lead">Connecting You to Excellence: Reach Out, We're Here for You!</p>
+  </div>
+  <div class="h-100 d-flex align-items-center justify-content-center">
+    <div class="col-md-8 order-md-1">
+      <form action="/shop/contact/" method="post">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="firstName">First name</label>
+            <input type="text" class="form-control" id="firstName" placeholder="" value="" required name="firstname">
+            <div class="invalid-feedback">
+              Valid first name is required.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="lastName">Last name</label>
+            <input type="text" class="form-control" id="lastName" placeholder="" value="" required name="lastname">
+            <div class="invalid-feedback">
+              Valid last name is required.
+            </div>
+          </div>
+        </div>
+
+
+        <div class="mb-3">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" id="email" placeholder="you@example.com" name="email" required>
+          <div class="invalid-feedback">
+            Please enter a valid email address.
+          </div>
+        </div>
+
+        <div class="my-2">
+          <div class="my-1">
+            <label for="phone">Phone&nbsp</label>
+          </div>
+          <input type="tel" class="form-control" id="phone" name="phone">
+        </div>
+        <label for="desc">How may we help you?</label>
+        <textarea class="form-control" aria-label="With textarea" id="desc" style="width: 710px; height: 200px;" name="desc"></textarea>
+        <br>
+        <button type="submit" class="btn btn-success">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+<script>
+ const phoneInputField = document.querySelector("#phone");
+ const phoneInput = window.intlTelInput(phoneInputField, {
+   utilsScript:
+   "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+ });
+
+ console.log('working');
+ if(localStorage.getItem('cart') == null){
+  var cart = {};
+}
+else
+{
+  cart = JSON.parse(localStorage.getItem('cart'));
+  document.getElementById('cart').innerHTML = Object.keys(cart).length;
+}
+$('.cart').click(function(){
+  console.log('clicked');
+  var idstr = this.id.toString();
+  console.log(idstr);
+  if (cart[idstr] !=undefined){
+    cart[idstr] = cart[idstr] + 1;
+  }
+  else
+  {
+    cart[idstr] = 1;
+  }
+  console.log(cart);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  document.getElementById('cart').innerHTML = Object.keys(cart).length;
+});
+$('#popcart').popover();
+document.getElementById("popcart").setAttribute('data-content', '<h5>Cart for your items in my shopping cart</h5>');
+</script>
+
+<script>
+{% if thank %}
+alert('Thank you for reaching out to us! Your inquiry has been received, and our dedicated team is diligently reviewing the details. We value your time and aim to provide a swift and comprehensive response. Please expect to hear from us shortly. If you have any additional information or concerns, feel free to reach out to our customer support. We appreciate your patience!');
+document.location="/shop/contact";
+{% endif %}
+</script>
+{% endblock %}
