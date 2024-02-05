@@ -1,13 +1,13 @@
 {
     "builds": [{
-        "src": "ShopDrop/ShopDrop/wsgi.py",
+        "src": "ShopDrop/wsgi.py",
         "use": "@vercel/python",
         "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
     }],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "ShopDrop/ShopDrop/wsgi.py"
+            "dest": "ShopDrop/wsgi.py"
         }
     ]
 }
